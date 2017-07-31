@@ -1,0 +1,6 @@
+# The name of this package.
+package: github.com/liam-middlebrook/golang-openshift-test
+
+# External dependencies.
+import:
+  - package: github.com/golang/glog
