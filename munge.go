@@ -3,14 +3,16 @@ package main
 import (
     "flag"
     "fmt"
-    "github.com/golang/glog"
     "net/http"
     "runtime"
+    log "github.com/sirupsen/logrus"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    glog.Infof("Received request from %s for %s", r.RemoteAddr, r.URL)
-    glog.Flush()
+    log.WithFields(log.Fields{
+    "remote": r.RemoteAddr,
+    "url": r.URL
+    }).Info("Received request")
 
     h := w.Header()
     h.Set("Content-Type", "text/plain")
@@ -23,8 +25,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
     flag.Parse()
 
-    glog.Info("Starting server...")
-    glog.Flush()
+    log.Info("Starting server...")
     http.HandleFunc("/", handler)
     http.ListenAndServe(":8080", nil)
 }

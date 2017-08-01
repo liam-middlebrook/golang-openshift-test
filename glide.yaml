@@ -3,4 +3,4 @@ package: github.com/liam-middlebrook/golang-openshift-test
 
 # External dependencies.
 import:
-  - package: github.com/golang/glog
+  - package: github.com/sirupsen/logrus
