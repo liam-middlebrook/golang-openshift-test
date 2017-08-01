@@ -17,6 +17,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
     fmt.Fprint(w, "Hello world!\n\n")
     fmt.Fprintf(w, "Go version: %s\n", runtime.Version())
+    fmt.Fprint(w, "MUNGE!\n\n")
 }
 
 func main() {
