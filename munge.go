@@ -8,6 +8,8 @@ import (
     log "github.com/sirupsen/logrus"
 )
 
+import "github.com/gin-gonic/gin"
+
 func handler(w http.ResponseWriter, r *http.Request) {
     log.WithFields(log.Fields{
     "remote": r.RemoteAddr,
@@ -26,6 +28,14 @@ func main() {
     flag.Parse()
 
     log.Info("Starting server...")
-    http.HandleFunc("/", handler)
-    http.ListenAndServe(":8080", nil)
+
+    r := gin.Default()
+
+    r.GET('/', func (c *gin.Context) {
+        c.JSON(200, gin.H{
+            "message": "MUNGE"
+        })
+    })
+
+    r.Run()
 }
