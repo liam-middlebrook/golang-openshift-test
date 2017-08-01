@@ -11,7 +11,7 @@ import (
 func handler(w http.ResponseWriter, r *http.Request) {
     log.WithFields(log.Fields{
     "remote": r.RemoteAddr,
-    "url": r.URL
+    "url": r.URL,
     }).Info("Received request")
 
     h := w.Header()
