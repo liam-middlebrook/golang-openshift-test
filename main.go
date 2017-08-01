@@ -10,6 +10,7 @@ import (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	glog.Infof("Received request from %s for %s", r.RemoteAddr, r.URL)
+    glog.Flush()
 
 	h := w.Header()
 	h.Set("Content-Type", "text/plain")
@@ -22,6 +23,7 @@ func main() {
 	flag.Parse()
 
 	glog.Info("Starting server...")
+    glog.Flush()
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }
