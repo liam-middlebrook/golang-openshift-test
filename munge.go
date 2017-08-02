@@ -24,11 +24,11 @@ func main() {
 
     // needs to be declared here not inline so provider is global XXX FIXME
     r := gin.Default()
-    csh_auth.Init()
+    csh_auth.Init("/auth/login")
     r.GET("/", csh_auth.AuthWrapper(func (c *gin.Context) { c.String(http.StatusOK, "spooky data") }))
     r.GET("/test", csh_auth.AuthWrapper(protectedProfile))
-    r.GET("/authenticate", csh_auth.AuthRequest)
-    r.GET("/authredir", csh_auth.AuthCallback)
-    r.GET("/logout", csh_auth.AuthLogout)
+    r.GET("/auth/login", csh_auth.AuthRequest)
+    r.GET("/auth/redir", csh_auth.AuthCallback)
+    r.GET("/auth/logout", csh_auth.AuthLogout)
     r.Run()
 }
