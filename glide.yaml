@@ -10,3 +10,5 @@ import:
   - package: golang.org/x/net/context
   - package: golang.org/x/oauth2
   - package: github.com/gin-gonic/gin
+  - package: github.com/liam-middlebrook/csh-auth
+    version: @dev
