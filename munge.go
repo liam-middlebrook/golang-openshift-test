@@ -5,7 +5,7 @@ import (
     "net/http"
     log "github.com/sirupsen/logrus"
     "github.com/gin-gonic/gin"
-    "./csh_auth"
+    csh_auth "github.com/liam-middlebrook/csh-auth"
 )
 
 func protectedProfile(c *gin.Context){
