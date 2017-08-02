@@ -2,26 +2,19 @@ package main
 
 import (
     "flag"
-    "fmt"
     "net/http"
-    "runtime"
     log "github.com/sirupsen/logrus"
+    "github.com/gin-gonic/gin"
+    "./csh_auth"
 )
 
-import "github.com/gin-gonic/gin"
-
-func handler(w http.ResponseWriter, r *http.Request) {
-    log.WithFields(log.Fields{
-    "remote": r.RemoteAddr,
-    "url": r.URL,
-    }).Info("Received request")
-
-    h := w.Header()
-    h.Set("Content-Type", "text/plain")
-
-    fmt.Fprint(w, "Hello world!\n\n")
-    fmt.Fprintf(w, "Go version: %s\n", runtime.Version())
-    fmt.Fprint(w, "MUNGE!\n\n")
+func protectedProfile(c *gin.Context){
+    claims, ok := c.Value(csh_auth.AuthKey).(csh_auth.CSHClaims)
+    if !ok {
+        log.Fatal("error finding claims")
+        return
+    }
+    c.String(http.StatusOK, "uid %s email %s name %s uuid %s", claims.UserInfo.Username, claims.UserInfo.Email, claims.UserInfo.FullName, claims.UserInfo.Subject)
 }
 
 func main() {
@@ -29,13 +22,13 @@ func main() {
 
     log.Info("Starting server...")
 
+    // needs to be declared here not inline so provider is global XXX FIXME
     r := gin.Default()
-
-    r.GET("/", func (c *gin.Context) {
-        c.JSON(200, gin.H{
-            "message": "MUNGE",
-        })
-    })
-
+    csh_auth.Init()
+    r.GET("/", csh_auth.AuthWrapper(func (c *gin.Context) { c.String(http.StatusOK, "spooky data") }))
+    r.GET("/test", csh_auth.AuthWrapper(protectedProfile))
+    r.GET("/authenticate", csh_auth.AuthRequest)
+    r.GET("/authredir", csh_auth.AuthCallback)
+    r.GET("/logout", csh_auth.AuthLogout)
     r.Run()
 }
